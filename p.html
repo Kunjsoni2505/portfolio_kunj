@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style>
+    .a {
+        position: relative;
+        width: 100%;
+        margin: auto;
+        perspective: 1000px;
+        background-color: black;
+    }
+
+    .a img.main-image {
+        width: 100%;
+        /* border-radius: 15%; */
+        filter: blur(2px);
+        display: block;
+        margin: 0 auto;
+        transition: transform 0.6s ease, box-shadow 0.6s ease;
+    }
+
+    .a:hover img.main-image {
+        transform: rotateY(20deg) rotateX(20deg);
+        /* Apply 3D rotation */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        /* Add shadow for depth */
+    }
+
+    .main-content img.logo {
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        border-radius: 100%;
+        transform: translateX(-50%);
+        width: 50px;
+    }
+
+    /* Hover effect applied to the container */
+    .a:hover .main-content {
+        transform: rotateY(20deg) rotateX(20deg);
+        /* Apply 3D rotation */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        /* Add shadow for depth */
+    }
+
+    .text-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgb(247, 196, 130);
+        font-size: xxx-large;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .partition {
+        width: 70%;
+        border-radius: 5%;
+        padding-top: 20%;
+        background-size: cover;
+    }
+
+    .contain {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .imag {
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 10%;
+        background-size: cover;
+    }
+
+    .text {
+        width: 50%;
+        padding-left: 120px;
+        color: rgb(115, 117, 119);
+        padding-top: 160px;
+    }
+
+    .txt {
+        color: rgb(247, 196, 130);
+        text-align: justify;
+        font-size:xx-large;
+    
+    }
+
+    .tecno {
+        width: 100px;
+        border-radius: 20%;
+
+    }
+
+    .over {
+        position: relative;
+        top: -15px;
+        left: 50px;
+        transform: translate(-50%, -50%);
+        color: rgb(247, 196, 130);
+        font-size: 0.8em;
+        font-weight: lighter;
+        text-align: center;
+    }
+    .imag2 {
+        display: flex;
+        justify-content: flex-start;
+        padding-left: 10%;
+        background-size: cover;
+    }
+    .text2 {
+        top: 50%;
+        left: 50%;
+        color: rgb(247, 196, 130);
+        font-size: xx-large;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 100px;
+    }
+    .images {
+        justify-content: center;
+        margin-left: 170px;
+    }
+    .texted {
+        color: rgb(247, 196, 130);
+        text-align: center;
+        font-size: large;
+    }
+    .bg {
+        background-color: black;
+        /* background-image: url("Gemini_Generated_Image_sizc4wsizc4wsizc.jpeg"); */
+        border-radius: 25px;
+        margin: 20px;
+        height: 300px;
+    }
+    .p-image {
+        width: 800px;
+        height: 500px;
+        border-radius: 38px;
+        filter: blur(8px);
+        
+    }
+    .p-logo {
+        position: absolute;
+        width: 100px;
+        border-radius: 38px;
+        border: 7px solid rgb(247, 196, 130);
+        left: 400px;
+        margin-top: 30px;
+        
+    }
+    .text_over {
+        position: absolute;
+        top: 4150px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgb(195, 193, 189);
+        font-size: 1.2em;
+        text-align:justify;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin-left: 50px;
+        margin-right: 100px;
+    }
+</style>
+
+<body style="background-color: #1b1a1a;">
+    <div class="a">
+        <div class="main-content">
+            <img class="main-image" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="kunj">
+            <div class="text-overlay">Welcome to my portFoLio</div>
+            <img class="logo" src="Gemini_Generated_Image_lpy12qlpy12qlpy1.jpeg" alt="Logo">
+
+        </div>
+    </div>
+    <div class="contain">
+
+        <div class="text">
+            <div>
+                <div>
+                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
+                    <div class="over">AI, ML</div>
+                </div>
+                <h1 class="txt">Text Sentiment Analyzer</h1>
+                <p>A text sentiment analyzer collects review data, preprocesses it by cleaning and tokenizing the text, and then applies padding to standardize input lengths. Using an RNN model, the system learns patterns in the review sequences to predict sentiment—whether a review is positive, negative, or neutral. Once trained, it quickly analyzes new reviews, offering real-time sentiment predictions.</p>
+                </div>
+        </div>
+        <div class="imag">
+            <img class="partition" src="Screenshot (14).png" alt="demo">
+        </div>
+    </div>
+<!-- 2nd project-->
+    <div class="contain">
+
+        <div class="imag2">
+            <img class="partition" src="image.png" alt="demo">
+        </div>
+        <div class="text">
+        
+            <div>
+                <div>
+                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
+                    <div class="over">AI, ML</div>
+                </div>
+                <h1 class="txt">Movie Recommendation System</h1>
+                <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
+                    movies similar to a user's selected choice. By embedding movies into a vector space, the system can
+                    effectively measure the similarity between movies and provide personalized recommendations.</p>
+                </div>
+        </div>
+    </div>
+<!-- 3rd project-->
+    <div class="contain">
+
+        <div class="text">
+            <div>
+                <div>
+                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
+                    <div class="over">AI, ML</div>
+                </div>
+                <h1 class="txt">Student Performance Prediction</h1>
+                <p>A student performance prediction system uses boosting models like CatBoost and Gradient Boost to achieve 96% accuracy. After preprocessing, mutual information is applied for feature selection. SHAP (SHapley Additive exPlanations) is then used to interpret the model's predictions, showing how each feature influences the outcome. Partial Dependence Plots (PDP) visualize the relationship between key features and predicted performance, offering deeper insights into the factors driving student success.</p>
+                </div>
+        </div>
+        <div class="imag">
+            <img class="partition" src="Screenshot 2024-10-13 120723.png" alt="demo">
+        </div>
+    </div>
+<!-- 4rth project-->
+    <div class="contain">
+
+        <div class="imag2">
+            <img class="partition" src="Screenshot 2024-10-13 123334.png" alt="demo">
+        </div>
+        <div class="text">
+        
+            <div>
+                <div>
+                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
+                    <div class="over">Python, Openpyxl</div>
+                </div>
+                <h1 class="txt">Automated sitting management system</h1>
+                <p>An automated sitting arrangement system uses Python and the OpenPyXL library to assign seating to students based on a predefined room structure in an Excel sheet. The system reads student data from a CSV file, including details like roll numbers and names. It then maps these students to the available seats in the room, as defined in the Excel template, ensuring the seating arrangement follows any specified rules or constraints. Once the arrangement is complete, the updated Excel sheet is automatically generated and provided for download, offering a seamless and efficient seating plan distribution.</p>
+                </div>
+        </div>
+    </div>
+<!-- 5th project-->
+    <div class="contain">
+
+        <div class="text">
+            <div>
+                <div>
+                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
+                    <div class="over">HTML, CSS</div>
+                </div>
+                <h1 class="txt">Amazon Replica</h1>
+                <p>An Amazon website replica is a simulated e-commerce platform that mimics the design and functionality of the original Amazon site. It features user-friendly navigation, product categories, a search bar, and product listings with images, descriptions, and prices. Users can add items to their cart, manage their accounts, and proceed to checkout. The replica may also include features like user reviews, wish lists, and recommendations, all designed to provide an engaging online shopping experience similar to that of Amazon.</p>
+                </div>
+        </div>
+        <div class="imag">
+            <img class="partition" src="Screenshot (16).png" alt="demo">
+        </div>
+    </div>
+<!-- More project -->
+    <div class="text2">
+        <h1>More Projects</h1>
+    </div>
+
+    <div style="display: flex;">
+        <div class="bg">
+            <div class="images">
+                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
+            </div>
+            <div>
+                <h1 class="texted">Alzaimer disease prediction</h1>
+                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
+                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
+                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
+            </div>
+        </div>
+        <div class="bg">
+            <div class="images">
+                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
+            </div>
+            <div>
+                <h1 class="texted">Heart Disease prediction</h1>
+                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
+                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
+                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
+            </div>
+        </div>
+        <div class="bg">
+            <div class="images">
+                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
+            </div>
+            <div>
+                <h1 class="texted">credit card fraud prediction</h1>
+                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
+                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
+                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex;">
+        <div class="bg">
+            <div class="images">
+                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
+            </div>
+            <div>
+                <h1 class="texted">Video games sales prediction</h1>
+                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
+                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
+                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
+            </div>
+        </div>
+        <div class="bg">
+            <div class="images">
+                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
+            </div>
+            <div>
+                <h1 class="texted">Portfolio website</h1>
+                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
+                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
+                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
+            </div>
+        </div>
+        <div class="bg">
+            <div class="images">
+                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
+            </div>
+            <div>
+                <h1 class="texted">Tic Tac Toe</h1>
+                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
+                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
+                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
+            </div>
+        </div>
+    </div>
+    <div style="background-color: black;">
+        <div style="display: flex; letter-spacing: 1px; align-items: center; margin-left: 30px; margin-top: 30px;">
+            <div style="color: rgb(247, 196, 130); font-size: 10px;">
+                <h1>Profiles</h1>
+            </div>
+            <div style="margin-left: 10px;">
+                <a style="color:rgb(247, 196, 130);" href="https://github.com/Kunjsoni2505"><i class="fa-brands fa-github"></i></a>
+            </div>
+            <div style="margin-left: 5px;">
+                <a style="color:rgb(247, 196, 130);" href="https://www.linkedin.com/in/kunj-soni-9608512a1/"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+        <div style="margin-bottom: 50px;">
+            <hr>
+        </div>
+        <div style="margin-left: auto; margin-right: auto; width: fit-content;">
+            <img class="p-image" src="Gemini_Generated_Image_sizc4wsizc4wsizc.jpeg" alt="kunj">
+            <div class="text_over">Welcome to my portfolio! I’m Kunjan Soni, an enthusiastic developer with a strong background in AI, machine learning, HTML, CSS, and Python. I have a solid understanding of Java, focusing on object-oriented programming (OOP) principles and data structures and algorithms (DSA), achieving a 3-star rating on HackerRank.
+
+                I’ve also had the honor of being selected for my college-level team in the Smart India Hackathon twice, where I collaborated with talented peers to tackle real-world challenges. Currently, I’m exploring front-end development using Java and JSP, creating dynamic and responsive web applications. I’m an avid problem-solver on LeetCode, constantly honing my skills in algorithmic challenges.
+                
+                I’m passionate about leveraging technology to create innovative solutions and am excited to connect with fellow developers and explore new opportunities. Thank you for visiting my portfolio!</div>
+            <img class="p-logo" src="1687431551064.jpg" alt="Logo">
+        </div>
+        <div style="margin-bottom: 50px;">
+            <hr>
+        </div>
+    </div>
+</body>
+
+</html>
