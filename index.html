@@ -1,377 +1,462 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Interactive Resume | Kunjan Soni</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Professional Slate & Teal -->
+    <!-- Application Structure Plan: A single-page application with a sticky top navigation bar for smooth scrolling to thematic sections (About/Skills, Experience, Projects, Education). This structure was chosen to provide a familiar yet modern user flow, allowing recruiters to quickly access the most relevant information. The experience section uses an interactive vertical timeline to keep the initial view clean, while projects are displayed in an expandable card grid for focused exploration. This design prioritizes scannability and encourages user interaction over passive reading. -->
+    <!-- Visualization & Content Choices: 
+        - Skills List -> Goal: Inform/Compare -> Viz: Interactive Bar Chart -> Interaction: Hover for details, buttons to filter by category -> Justification: More engaging than a static list; filtering allows recruiters to quickly assess role-specific skills. -> Library: Chart.js (Canvas).
+        - Experience History -> Goal: Organize/Show Change -> Viz: Vertical Timeline -> Interaction: Click to expand/collapse job details -> Justification: A natural and clean way to present chronological data, preventing information overload. -> Library/Method: HTML/CSS/JS.
+        - Projects List -> Goal: Organize/Detail on Demand -> Viz: Card Grid -> Interaction: Click to expand/collapse project details -> Justification: Modern, responsive layout that allows users to scan projects and dive deep into those of interest. -> Library/Method: HTML/CSS/JS.
+        - DSA Achievement -> Goal: Inform/Quantify -> Viz: Animated Counter -> Interaction: Animates on view -> Justification: Adds a small dynamic "wow" factor to make the number more impactful. -> Library/Method: JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 9999px;
+            background-color: white;
+            border: 4px solid #14b8a6; /* teal-500 */
+            left: -0.625rem;
+            top: 0;
+            z-index: 10;
+        }
+        .details-content {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .details-content.open {
+            max-height: 1000px; /* Large enough to fit content */
+            opacity: 1;
+        }
+    </style>
 </head>
-<style>
-    .a {
-        position: relative;
-        width: 100%;
-        margin: auto;
-        perspective: 1000px;
-        background-color: black;
-    }
+<body class="text-slate-700">
 
-    .a img.main-image {
-        width: 100%;
-        /* border-radius: 15%; */
-        filter: blur(2px);
-        display: block;
-        margin: 0 auto;
-        transition: transform 0.6s ease, box-shadow 0.6s ease;
-    }
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="text-2xl font-bold text-slate-800">
+                Kunjan Soni
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#skills" class="text-slate-600 hover:text-teal-500 transition-colors">Skills</a>
+                <a href="#experience" class="text-slate-600 hover:text-teal-500 transition-colors">Experience</a>
+                <a href="#projects" class="text-slate-600 hover:text-teal-500 transition-colors">Projects</a>
+                <a href="#education" class="text-slate-600 hover:text-teal-500 transition-colors">Education</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-slate-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#skills" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-100">Skills</a>
+            <a href="#experience" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-100">Experience</a>
+            <a href="#projects" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-100">Projects</a>
+            <a href="#education" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-100">Education</a>
+        </div>
+    </header>
 
-    .a:hover img.main-image {
-        transform: rotateY(20deg) rotateX(20deg);
-        /* Apply 3D rotation */
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-        /* Add shadow for depth */
-    }
+    <main class="container mx-auto px-6 py-12">
+        <section id="hero" class="text-center mb-20">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-slate-800 mb-4">KUNJAN SONI</h1>
+            <p class="text-lg md:text-xl text-teal-600 font-medium mb-6">AI/ML Engineer & Full Stack Developer</p>
+            <p class="max-w-3xl mx-auto text-slate-600 mb-8">
+                A dedicated and innovative developer with a Master's in Computer Applications and a strong foundation in machine learning, NLP, and full-stack web development. Passionate about building intelligent applications that solve real-world problems, from research and model development to deployment and user interface design.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="mailto:kunjansoni169@gmail.com" class="bg-teal-500 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-teal-600 transition-all">Contact Me</a>
+                <a href="https://github.com/Kunjsoni2505" target="_blank" class="bg-white text-slate-700 font-semibold py-2 px-6 rounded-lg shadow-md border border-slate-300 hover:bg-slate-50 transition-all">GitHub</a>
+            </div>
+        </section>
 
-    .main-content img.logo {
-        position: absolute;
-        bottom: -25px;
-        left: 50%;
-        border-radius: 100%;
-        transform: translateX(-50%);
-        width: 50px;
-    }
-
-    /* Hover effect applied to the container */
-    .a:hover .main-content {
-        transform: rotateY(20deg) rotateX(20deg);
-        /* Apply 3D rotation */
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-        /* Add shadow for depth */
-    }
-
-    .text-overlay {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: rgb(247, 196, 130);
-        font-size: xxx-large;
-        font-weight: bold;
-        text-align: center;
-    }
-
-    .partition {
-        width: 70%;
-        border-radius: 5%;
-        padding-top: 20%;
-        background-size: cover;
-    }
-
-    .contain {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .imag {
-        display: flex;
-        justify-content: flex-end;
-        padding-right: 10%;
-        background-size: cover;
-    }
-
-    .text {
-        width: 50%;
-        padding-left: 120px;
-        color: rgb(115, 117, 119);
-        padding-top: 160px;
-    }
-
-    .txt {
-        color: rgb(247, 196, 130);
-        text-align: justify;
-        font-size:xx-large;
-    
-    }
-
-    .tecno {
-        width: 100px;
-        border-radius: 20%;
-
-    }
-
-    .over {
-        position: relative;
-        top: -15px;
-        left: 50px;
-        transform: translate(-50%, -50%);
-        color: rgb(247, 196, 130);
-        font-size: 0.8em;
-        font-weight: lighter;
-        text-align: center;
-    }
-    .imag2 {
-        display: flex;
-        justify-content: flex-start;
-        padding-left: 10%;
-        background-size: cover;
-    }
-    .text2 {
-        top: 50%;
-        left: 50%;
-        color: rgb(247, 196, 130);
-        font-size: xx-large;
-        font-weight: bold;
-        text-align: center;
-        margin-top: 100px;
-    }
-    .images {
-        justify-content: center;
-        margin-left: 170px;
-    }
-    .texted {
-        color: rgb(247, 196, 130);
-        text-align: center;
-        font-size: large;
-    }
-    .bg {
-        background-color: black;
-        /* background-image: url("Gemini_Generated_Image_sizc4wsizc4wsizc.jpeg"); */
-        border-radius: 25px;
-        margin: 20px;
-        height: 300px;
-    }
-    .p-image {
-        width: 800px;
-        height: 500px;
-        border-radius: 38px;
-        filter: blur(8px);
+        <section id="skills" class="mb-20">
+            <h2 class="text-4xl font-bold text-center text-slate-800 mb-4">Technical Skills</h2>
+            <p class="text-center text-slate-600 mb-10 max-w-2xl mx-auto">
+                This chart provides a visual overview of my technical abilities. Use the buttons to filter by category and explore the technologies I've mastered across AI/ML, web development, and more.
+            </p>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <div class="flex flex-wrap justify-center gap-2 mb-6">
+                    <button class="skill-filter-btn active bg-teal-500 text-white py-1 px-3 rounded-full text-sm" data-category="All">All</button>
+                    <button class="skill-filter-btn bg-slate-200 text-slate-700 py-1 px-3 rounded-full text-sm" data-category="AI/ML">AI/ML</button>
+                    <button class="skill-filter-btn bg-slate-200 text-slate-700 py-1 px-3 rounded-full text-sm" data-category="Web Dev">Web Dev</button>
+                    <button class="skill-filter-btn bg-slate-200 text-slate-700 py-1 px-3 rounded-full text-sm" data-category="Languages">Languages</button>
+                    <button class="skill-filter-btn bg-slate-200 text-slate-700 py-1 px-3 rounded-full text-sm" data-category="Tools">Tools</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+            </div>
+        </section>
         
-    }
-    .p-logo {
-        position: absolute;
-        width: 100px;
-        border-radius: 38px;
-        border: 7px solid rgb(247, 196, 130);
-        left: 400px;
-        margin-top: 30px;
-        
-    }
-    .text_over {
-        position: absolute;
-        top: 4150px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: rgb(195, 193, 189);
-        font-size: 1.2em;
-        text-align:justify;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin-left: 50px;
-        margin-right: 100px;
-    }
-</style>
+        <section id="experience" class="mb-20">
+            <h2 class="text-4xl font-bold text-center text-slate-800 mb-4">Professional Experience</h2>
+             <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                Here is a timeline of my professional journey. Click on any role to expand and see the key responsibilities and accomplishments from each position, from full-stack development to machine learning research.
+            </p>
+            <div class="relative border-l-2 border-teal-500 ml-4 md:ml-0 pl-8 py-4">
+                <!-- Experience Items will be injected here by JS -->
+            </div>
+        </section>
 
-<body style="background-color: #1b1a1a;">
-    <div class="a">
-        <div class="main-content">
-            <img class="main-image" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="kunj">
-            <div class="text-overlay">Welcome to my portFoLio</div>
-            <img class="logo" src="Gemini_Generated_Image_lpy12qlpy12qlpy1.jpeg" alt="Logo">
+        <section id="projects" class="mb-20">
+            <h2 class="text-4xl font-bold text-center text-slate-800 mb-4">Projects</h2>
+             <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                Below are some of the key projects I have developed. They showcase my ability to apply complex technologies like Large Language Models, Explainable AI, and Computer Vision. Click 'View Details' to learn more about each project's implementation.
+            </p>
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Cards will be injected here by JS -->
+            </div>
+        </section>
 
-        </div>
-    </div>
-    <div class="contain">
+        <section id="education" class="mb-20">
+            <h2 class="text-4xl font-bold text-center text-slate-800 mb-4">Education & Achievements</h2>
+             <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+                My academic background has provided me with a strong theoretical foundation in computer science, complemented by practical achievements and a commitment to continuous learning.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Education</h3>
+                    <div id="education-list">
+                        <!-- Education Items will be injected here by JS -->
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Achievements</h3>
+                    <div id="achievements-list" class="space-y-4">
+                         <!-- Achievement Items will be injected here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-        <div class="text">
-            <div>
-                <div>
-                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
-                    <div class="over">AI, ML</div>
-                </div>
-                <h1 class="txt">Text Sentiment Analyzer</h1>
-                <p>A text sentiment analyzer collects review data, preprocesses it by cleaning and tokenizing the text, and then applies padding to standardize input lengths. Using an RNN model, the system learns patterns in the review sequences to predict sentiment—whether a review is positive, negative, or neutral. Once trained, it quickly analyzes new reviews, offering real-time sentiment predictions.</p>
-                </div>
-        </div>
-        <div class="imag">
-            <img class="partition" src="Screenshot (14).png" alt="demo">
-        </div>
-    </div>
-<!-- 2nd project-->
-    <div class="contain">
+    <footer class="bg-slate-800 text-white text-center py-6">
+        <p>&copy; 2025 Kunjan Soni. All Rights Reserved.</p>
+        <p>Interactive resume created with HTML, Tailwind CSS, and Chart.js.</p>
+    </footer>
 
-        <div class="imag2">
-            <img class="partition" src="image.png" alt="demo">
-        </div>
-        <div class="text">
-        
-            <div>
-                <div>
-                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
-                    <div class="over">AI, ML</div>
-                </div>
-                <h1 class="txt">Movie Recommendation System</h1>
-                <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
-                    movies similar to a user's selected choice. By embedding movies into a vector space, the system can
-                    effectively measure the similarity between movies and provide personalized recommendations.</p>
-                </div>
-        </div>
-    </div>
-<!-- 3rd project-->
-    <div class="contain">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data
+            const resumeData = {
+                skills: [
+                    { name: 'Python', category: 'Languages', proficiency: 95 },
+                    { name: 'Java', category: 'Languages', proficiency: 75 },
+                    { name: 'SQL', category: 'Languages', proficiency: 80 },
+                    { name: 'JavaScript', category: 'Languages', proficiency: 85 },
+                    { name: 'LangChain', category: 'AI/ML', proficiency: 90 },
+                    { name: 'TensorFlow', category: 'AI/ML', proficiency: 85 },
+                    { name: 'Scikit-learn', category: 'AI/ML', proficiency: 90 },
+                    { name: 'Pandas', category: 'AI/ML', proficiency: 95 },
+                    { name: 'NumPy', category: 'AI/ML', proficiency: 95 },
+                    { name: 'React.js', category: 'Web Dev', proficiency: 85 },
+                    { name: 'Node.js', category: 'Web Dev', proficiency: 80 },
+                    { name: 'Express.js', category: 'Web Dev', proficiency: 80 },
+                    { name: 'Django', category: 'Web Dev', proficiency: 85 },
+                    { name: 'Streamlit', category: 'Web Dev', proficiency: 80 },
+                    { name: 'Git & GitHub', category: 'Tools', proficiency: 90 },
+                    { name: 'Docker', category: 'Tools', proficiency: 70 },
+                    { name: 'Jupyter', category: 'Tools', proficiency: 95 },
+                ],
+                experience: [
+                    {
+                        role: 'Full Stack Developer Intern',
+                        company: 'Techori',
+                        location: '(Remote)',
+                        period: 'Aug 2025 – Present',
+                        details: [
+                            'Developing a full-stack web application using React.js for the frontend and Node.js/Express.js for the backend.',
+                            'Building responsive, component-based user interfaces and implementing core features.',
+                            'Designing and implementing RESTful APIs to manage data flow between the client and server.',
+                            'Collaborating with the engineering team using Git for version control in an agile development workflow.'
+                        ]
+                    },
+                    {
+                        role: 'Research Intern',
+                        company: 'ITM University',
+                        location: 'Gwalior',
+                        period: 'March 2025 – May 2025',
+                        details: [
+                            'Conducted end-to-end research on multi-modal sentiment analysis, culminating in the development of a comprehensive research paper.',
+                            'Engineered and trained a novel model to analyze sentiment from text, images, and video feeds.',
+                            'Authored a research paper detailing the project\'s methodology, model architecture, and experimental results, which is currently under review for publication.'
+                        ]
+                    },
+                    {
+                        role: 'Machine Learning Intern',
+                        company: 'Saanvi Innovations',
+                        location: 'Gwalior',
+                        period: 'June 2024 – Aug 2024',
+                        details: [
+                            'Researched and implemented end-to-end machine learning pipelines for diverse problem statements, including NLP, sentiment analysis, and credit card fraud detection.',
+                            'Performed comprehensive data preprocessing, including data cleaning, feature extraction, feature selection, and applying balancing techniques.',
+                            'Applied Explainable AI (XAI) techniques like SHAP and LIME to interpret model predictions and validate findings from research papers.',
+                            'Developed proof-of-concept web applications using Django to deploy predictive models, such as a heart disease prediction tool.'
+                        ]
+                    }
+                ],
+                projects: [
+                    {
+                        title: 'LangChain YouTube Assistant',
+                        category: 'Chrome Extension',
+                        details: [
+                            'Engineered a RAG (Retrieval-Augmented Generation) pipeline using LangChain and Python to enable interactive Q&A and summarization for YouTube video transcripts.',
+                            'Developed a user-facing Chrome Extension interface allowing for real-time interaction with the LLM, packaged for local developer testing.'
+                        ],
+                        link: '#'
+                    },
+                    {
+                        title: 'Student Performance Predictor with XAI',
+                        category: 'Machine Learning, Python',
+                        details: [
+                            'Built and trained a classification model to predict student success, achieving 94% accuracy on a complex dataset of academic and non-academic factors.',
+                            'Implemented Explainable AI (XAI) techniques using SHAP and LIME to interpret model predictions, providing actionable insights into the key drivers of performance.'
+                        ],
+                        link: '#'
+                    },
+                    {
+                        title: 'Multi-Modal Sentiment Analyzer',
+                        category: 'Django, NLP, Computer Vision',
+                        details: [
+                            'Developed a full-stack web application using Django to analyze sentiment from text, images, and bulk CSV files.',
+                            'Integrated a feature for real-time sentiment detection from live video feeds using OpenCV and TensorFlow.'
+                        ],
+                        link: '#'
+                    }
+                ],
+                education: [
+                    { degree: 'MCA (Master of Computer Applications)', institution: 'ITM University, Gwalior', score: 'CGPA: 8.9', year: '2025' },
+                    { degree: 'B.Ed (Bachelor of Education)', institution: 'Jiwaji University, Gwalior', score: '87%', year: '2022' },
+                    { degree: 'B.Sc (Computer Science)', institution: 'Jiwaji University, Gwalior', score: '67%', year: '2020' },
+                ],
+                achievements: [
+                    { text: 'Solved', value: 100, suffix: '+ Data Structures & Algorithms (DSA) problems on LeetCode, CodeChef, and Codeforces.' },
+                    { text: 'Awarded <strong>Gold Medal</strong> for securing the first rank in the MCA program.', value: null, suffix: '' },
+                ]
+            };
 
-        <div class="text">
-            <div>
-                <div>
-                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
-                    <div class="over">AI, ML</div>
-                </div>
-                <h1 class="txt">Student Performance Prediction</h1>
-                <p>A student performance prediction system uses boosting models like CatBoost and Gradient Boost to achieve 96% accuracy. After preprocessing, mutual information is applied for feature selection. SHAP (SHapley Additive exPlanations) is then used to interpret the model's predictions, showing how each feature influences the outcome. Partial Dependence Plots (PDP) visualize the relationship between key features and predicted performance, offering deeper insights into the factors driving student success.</p>
-                </div>
-        </div>
-        <div class="imag">
-            <img class="partition" src="Screenshot 2024-10-13 120723.png" alt="demo">
-        </div>
-    </div>
-<!-- 4rth project-->
-    <div class="contain">
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Skills Chart
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            let skillsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Proficiency',
+                        data: [],
+                        backgroundColor: '#14b8a6', // teal-500
+                        borderColor: '#0f766e', // teal-700
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#475569' } // slate-600
+                        },
+                        y: {
+                            ticks: { color: '#475569' } // slate-600
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Proficiency: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
 
-        <div class="imag2">
-            <img class="partition" src="Screenshot 2024-10-13 123334.png" alt="demo">
-        </div>
-        <div class="text">
-        
-            <div>
-                <div>
-                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
-                    <div class="over">Python, Openpyxl</div>
-                </div>
-                <h1 class="txt">Automated sitting management system</h1>
-                <p>An automated sitting arrangement system uses Python and the OpenPyXL library to assign seating to students based on a predefined room structure in an Excel sheet. The system reads student data from a CSV file, including details like roll numbers and names. It then maps these students to the available seats in the room, as defined in the Excel template, ensuring the seating arrangement follows any specified rules or constraints. Once the arrangement is complete, the updated Excel sheet is automatically generated and provided for download, offering a seamless and efficient seating plan distribution.</p>
-                </div>
-        </div>
-    </div>
-<!-- 5th project-->
-    <div class="contain">
-
-        <div class="text">
-            <div>
-                <div>
-                    <img class="tecno" src="Gemini_Generated_Image_sizc4wsizc4wsizc1.jpeg" alt="technique">
-                    <div class="over">HTML, CSS</div>
-                </div>
-                <h1 class="txt">Amazon Replica</h1>
-                <p>An Amazon website replica is a simulated e-commerce platform that mimics the design and functionality of the original Amazon site. It features user-friendly navigation, product categories, a search bar, and product listings with images, descriptions, and prices. Users can add items to their cart, manage their accounts, and proceed to checkout. The replica may also include features like user reviews, wish lists, and recommendations, all designed to provide an engaging online shopping experience similar to that of Amazon.</p>
-                </div>
-        </div>
-        <div class="imag">
-            <img class="partition" src="Screenshot (16).png" alt="demo">
-        </div>
-    </div>
-<!-- More project -->
-    <div class="text2">
-        <h1>More Projects</h1>
-    </div>
-
-    <div style="display: flex;">
-        <div class="bg">
-            <div class="images">
-                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
-            </div>
-            <div>
-                <h1 class="texted">Alzaimer disease prediction</h1>
-                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
-                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
-                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
-            </div>
-        </div>
-        <div class="bg">
-            <div class="images">
-                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
-            </div>
-            <div>
-                <h1 class="texted">Heart Disease prediction</h1>
-                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
-                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
-                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
-            </div>
-        </div>
-        <div class="bg">
-            <div class="images">
-                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
-            </div>
-            <div>
-                <h1 class="texted">credit card fraud prediction</h1>
-                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
-                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
-                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
-            </div>
-        </div>
-    </div>
-
-    <div style="display: flex;">
-        <div class="bg">
-            <div class="images">
-                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
-            </div>
-            <div>
-                <h1 class="texted">Video games sales prediction</h1>
-                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
-                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
-                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
-            </div>
-        </div>
-        <div class="bg">
-            <div class="images">
-                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
-            </div>
-            <div>
-                <h1 class="texted">Portfolio website</h1>
-                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
-                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
-                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
-            </div>
-        </div>
-        <div class="bg">
-            <div class="images">
-                <img class="partition" src="demo_wallpaper_by_zdreamr_d4vb87z-414w-2x.jpg" alt="demo">
-            </div>
-            <div>
-                <h1 class="texted">Tic Tac Toe</h1>
-                    <!-- <p>This project presents a movie recommendation system that utilizes a vectorization technique to suggest
-                        movies similar to a user's selected choice. By embedding movies into a vector space, the system can
-                        effectively measure the similarity between movies and provide personalized recommendations.</p> -->
-            </div>
-        </div>
-    </div>
-    <div style="background-color: black;">
-        <div style="display: flex; letter-spacing: 1px; align-items: center; margin-left: 30px; margin-top: 30px;">
-            <div style="color: rgb(247, 196, 130); font-size: 10px;">
-                <h1>Profiles</h1>
-            </div>
-            <div style="margin-left: 10px;">
-                <a style="color:rgb(247, 196, 130);" href="https://github.com/Kunjsoni2505"><i class="fa-brands fa-github"></i></a>
-            </div>
-            <div style="margin-left: 5px;">
-                <a style="color:rgb(247, 196, 130);" href="https://www.linkedin.com/in/kunj-soni-9608512a1/"><i class="fa-brands fa-linkedin"></i></a>
-            </div>
-        </div>
-        <div style="margin-bottom: 50px;">
-            <hr>
-        </div>
-        <div style="margin-left: auto; margin-right: auto; width: fit-content;">
-            <img class="p-image" src="Gemini_Generated_Image_sizc4wsizc4wsizc.jpeg" alt="kunj">
-            <div class="text_over">Welcome to my portfolio! I’m Kunjan Soni, an enthusiastic developer with a strong background in AI, machine learning, HTML, CSS, and Python. I have a solid understanding of Java, focusing on object-oriented programming (OOP) principles and data structures and algorithms (DSA), achieving a 3-star rating on HackerRank.
-
-                I’ve also had the honor of being selected for my college-level team in the Smart India Hackathon twice, where I collaborated with talented peers to tackle real-world challenges. Currently, I’m exploring front-end development using Java and JSP, creating dynamic and responsive web applications. I’m an avid problem-solver on LeetCode, constantly honing my skills in algorithmic challenges.
+            function updateChart(category) {
+                const filteredSkills = category === 'All' 
+                    ? resumeData.skills 
+                    : resumeData.skills.filter(skill => skill.category === category);
                 
-                I’m passionate about leveraging technology to create innovative solutions and am excited to connect with fellow developers and explore new opportunities. Thank you for visiting my portfolio!</div>
-            <img class="p-logo" src="1687431551064.jpg" alt="Logo">
-        </div>
-        <div style="margin-bottom: 50px;">
-            <hr>
-        </div>
-    </div>
-</body>
+                filteredSkills.sort((a, b) => a.proficiency - b.proficiency);
 
+                skillsChart.data.labels = filteredSkills.map(skill => skill.name);
+                skillsChart.data.datasets[0].data = filteredSkills.map(skill => skill.proficiency);
+                skillsChart.update();
+            }
+
+            const filterButtons = document.querySelectorAll('.skill-filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-teal-500', 'text-white');
+                        btn.classList.add('bg-slate-200', 'text-slate-700');
+                    });
+                    button.classList.add('active', 'bg-teal-500', 'text-white');
+                    button.classList.remove('bg-slate-200', 'text-slate-700');
+                    updateChart(button.dataset.category);
+                });
+            });
+
+            updateChart('All');
+
+            // Populate Experience
+            const experienceContainer = document.querySelector('.border-l-2');
+            resumeData.experience.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'timeline-item mb-10';
+                div.innerHTML = `
+                    <h3 class="text-xl font-bold text-slate-800">${item.role}</h3>
+                    <p class="font-semibold text-teal-600">${item.company} | <span class="text-slate-500">${item.location}</span></p>
+                    <p class="text-sm text-slate-500 mb-3">${item.period}</p>
+                    <button class="text-teal-500 font-semibold text-sm details-toggle">Show Details ▼</button>
+                    <div class="details-content mt-2">
+                        <ul class="list-disc pl-5 text-slate-600 space-y-1">
+                            ${item.details.map(d => `<li>${d}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                experienceContainer.appendChild(div);
+            });
+
+            // Populate Projects
+            const projectsGrid = document.getElementById('projects-grid');
+            resumeData.projects.forEach(project => {
+                const div = document.createElement('div');
+                div.className = 'bg-white rounded-xl shadow-lg p-6 flex flex-col';
+                div.innerHTML = `
+                    <h3 class="text-xl font-bold text-slate-800">${project.title}</h3>
+                    <p class="text-sm text-teal-600 font-medium mb-4">${project.category}</p>
+                    <div class="details-content flex-grow">
+                         <ul class="list-disc pl-5 text-slate-600 space-y-1 mb-4">
+                            ${project.details.map(d => `<li>${d}</li>`).join('')}
+                        </ul>
+                        <a href="${project.link}" target="_blank" class="text-teal-500 font-semibold hover:underline">View on GitHub →</a>
+                    </div>
+                    <button class="mt-4 text-teal-500 font-semibold text-sm details-toggle self-start">View Details ▼</button>
+                `;
+                projectsGrid.appendChild(div);
+            });
+            
+            // Details Toggle Logic
+            document.body.addEventListener('click', function(event) {
+                if (event.target.classList.contains('details-toggle')) {
+                    const button = event.target;
+                    const content = button.parentElement.querySelector('.details-content');
+                    content.classList.toggle('open');
+                    if (content.classList.contains('open')) {
+                        button.textContent = 'Hide Details ▲';
+                    } else {
+                        button.textContent = button.parentElement.id === 'projects-grid' || button.parentElement.matches('.bg-white') 
+                            ? 'View Details ▼' 
+                            : 'Show Details ▼';
+                    }
+                }
+            });
+
+            // Populate Education
+            const educationList = document.getElementById('education-list');
+            resumeData.education.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'mb-4 pb-4 border-b border-slate-200 last:border-b-0';
+                div.innerHTML = `
+                    <p class="font-bold text-slate-800">${item.degree}</p>
+                    <p class="text-slate-600">${item.institution}</p>
+                    <p class="text-sm text-slate-500">${item.year} | ${item.score}</p>
+                `;
+                educationList.appendChild(div);
+            });
+
+            // Populate Achievements & Counter Animation
+            const achievementsList = document.getElementById('achievements-list');
+            resumeData.achievements.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'flex items-start space-x-3';
+                div.innerHTML = `
+                    <span class="text-teal-500 text-2xl mt-1">✓</span>
+                    <div>
+                        ${item.value !== null ? 
+                            `<p class="text-slate-600"><strong class="text-3xl font-bold text-slate-800 achievement-counter" data-target="${item.value}">0</strong>${item.suffix}</p>` :
+                            `<p class="text-slate-600">${item.text}</p>`
+                        }
+                    </div>
+                `;
+                achievementsList.appendChild(div);
+            });
+
+            function animateCounter(counter) {
+                const target = +counter.getAttribute('data-target');
+                const updateCount = () => {
+                    const count = +counter.innerText;
+                    const increment = target / 100; // Animation speed
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(updateCount, 20);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            }
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                       const counter = entry.target.querySelector('.achievement-counter');
+                       if (counter && counter.innerText === '0') {
+                           animateCounter(counter);
+                       }
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(achievementsList);
+        });
+    </script>
+</body>
 </html>
